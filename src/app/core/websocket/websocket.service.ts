@@ -20,9 +20,8 @@ export class WebsocketService {
 
         this._connectionStatus.set('connecting');
 
-        const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
         const host = 'localhost:7188'; // TODO: spostare in environment quando avremo ambienti diversi
-        const url = `${protocol}://${host}/ws/poker/${roomId}`;
+        const url = `wss://${host}/ws/poker/${roomId}`;
 
         this.socket = new WebSocket(url);
 

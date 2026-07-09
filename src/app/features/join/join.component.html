@@ -1,0 +1,22 @@
+<div class="join-container">
+    <div class="join-card">
+        <h1>Planning Poker</h1>
+        <p>Inserisci il tuo nome per creare una nuova stanza</p>
+
+        <input
+            type="text"
+            [(ngModel)]="userName"
+            placeholder="Il tuo nome"
+            (keydown.enter)="createRoom()"
+            class="name-input"
+        />
+
+        <button (click)="createRoom()" [disabled]="!userName().trim() || loading()" class="create-button">
+            {{ loading() ? 'Creazione in corso...' : 'Crea stanza' }}
+        </button>
+
+        @if (error()) {
+            <p class="error-message">{{ error() }}</p>
+        }
+    </div>
+</div>
