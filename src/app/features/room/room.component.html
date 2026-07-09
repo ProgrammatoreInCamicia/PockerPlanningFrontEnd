@@ -1,1 +1,42 @@
-<p>room works!</p>
+@if (needsName()) {
+  <div class="name-prompt">
+    <h2>Ti sei collegato alla stanza "{{ roomId() }}"</h2>
+    <p>Inserisci il tuo nome per partecipare</p>
+
+    <input
+      type="text"
+      [(ngModel)]="voterName"
+      placeholder="Il tuo nome"
+      (keydown.enter)="submitVoterName()"
+    />
+
+    <button (click)="submitVoterName()" [disabled]="!voterName().trim() || joining()">
+      {{ joining() ? 'Connessione...' : 'Entra' }}
+    </button>
+
+    @if (joinError()) {
+      <p class="error">{{ joinError() }}</p>
+    }
+  </div>
+} @else if (joining()) {
+  <p>Connessione in corso...</p>
+} @else {
+  <div class="room-content">
+    <h2>Stanza: {{ roomId() }}</h2>
+    <p>Connesso come: {{ roomStore.currentUser()?.userName }} ({{ roomStore.currentUser()?.role }})</p>
+
+    <h3>Partecipanti</h3>
+    <ul>
+      @for (p of roomStore.participants(); track p.userName) {
+        <li>{{ p.userName }} — {{ p.role }} — {{ p.connected ? '🟢' : '⚪' }} — {{ p.hasVoted ? 'ha votato' : '...' }}</li>
+      }
+    </ul>
+
+    <h3>Task</h3>
+    <ul>
+      @for (t of roomStore.tasks(); track t.id) {
+        <li>{{ t.title }} — {{ t.status }}</li>
+      }
+    </ul>
+  </div>
+}

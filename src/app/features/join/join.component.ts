@@ -13,7 +13,7 @@ import { saveSession } from '../../core/session/session.store';
 })
 export class JoinComponent {
   private readonly roomApi = inject(RoomApiService);
-  private readonly roomStore = inject(RoomStore);
+  // private readonly roomStore = inject(RoomStore);
   private readonly router = inject(Router);
 
   readonly userName = signal('');
@@ -37,7 +37,7 @@ export class JoinComponent {
       };
 
       saveSession(roomId, user);
-      await this.roomStore.connectAndJoin(roomId, user);
+      // await this.roomStore.connectAndJoin(roomId, user);
 
       this.router.navigate(['/room', roomId]);
     } catch (err) {
