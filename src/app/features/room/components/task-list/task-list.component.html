@@ -1,0 +1,26 @@
+<div class="task-container">
+    <div class="header">
+        <h3>Tasks</h3>
+        @if(roomStore.currentUser()?.role === 'facilitator') {
+            <input #fileInput type="file" (change)="onFileSelected($event)" accept=".csv" hidden/>
+            <button title="Import tasks" class="action-button" (click)="importTasks()">
+                📂
+            </button>
+            <button title="Reset tasks" class="action-button" (click)="roomStore.resetTasks()" [disabled]="roomStore.tasks()?.length === 0">
+                🗑️
+            </button>
+        }
+        
+    </div>
+    <ul>
+        <li 
+            class="task-item" 
+            *ngFor="let task of roomStore.tasks()" 
+            (click)="selectTask(task)" 
+            [class.selected]="roomStore.activeTask()?.id === task.id"
+            [class.disabled]="roomStore.currentUser()?.role === 'voter'"
+        >
+            {{ task.title }}
+        </li>
+    </ul>
+</div>

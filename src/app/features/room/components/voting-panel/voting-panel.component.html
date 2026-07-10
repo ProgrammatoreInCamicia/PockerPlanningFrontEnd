@@ -1,0 +1,22 @@
+<div class="cards">
+    @if(roomStore.currentUser()?.role === 'voter') {
+        @for(card of roomStore.cards(); track card) {
+            <button 
+                class="card" 
+                (click)="selectCard(card)" 
+                [class.selected]="selectedCard() === card"
+                [disabled]="roomStore.activeTask() == null || roomStore.revealed()"
+            >
+                {{ card }}
+            </button>
+        }
+    }
+    @else {
+        <button class="action-button" (click)="roomStore.reveal()" [disabled]="roomStore.revealed() || !roomStore.allVoted()">
+            Rivela carte
+        </button>
+        <button class="action-button" (click)="roomStore.reset()" [disabled]="!roomStore.allVoted()">
+            Resetta voti
+        </button>
+    }
+</div>

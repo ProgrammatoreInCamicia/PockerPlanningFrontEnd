@@ -3,6 +3,7 @@ export type OutgoingMessage =
     | { type: 'vote'; value: string }
     | { type: 'reveal' }
     | { type: 'reset' }
+    | { type: 'resetTasks' }
     | { type: 'changePreset'; preset: string }
     | { type: 'selectTask'; taskId: string };
 
@@ -29,7 +30,7 @@ export interface TaskDto {
 
 export interface RoomStateMessage {
     type: 'roomState',
-    preset: string;
+    preset: 'fibonacci' | 'tshirt';
     revealed: boolean;
     activeTaskId: string | null;
     tasks: TaskDto[];
@@ -47,3 +48,8 @@ export interface ErrorMessage {
 }
 
 export type IncomingMessage = RoomStateMessage | VotesRevealedMessage | ErrorMessage;
+
+export const CardPresets = {
+    "fibonacci": ["0", "1", "2", "3", "5", "8", "13", "21", "?", "☕"],
+    "tshirt": ["XS", "S", "M", "L", "XL", "XXL", "?", "☕"],
+} as const;

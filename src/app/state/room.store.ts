@@ -1,6 +1,6 @@
 import { computed, inject, Service, signal } from "@angular/core";
 import { WebsocketService } from "../core/websocket/websocket.service";
-import { IncomingMessage, ParticipantDto, TaskDto } from "../core/websocket/poker-messages";
+import { CardPresets, IncomingMessage, ParticipantDto, TaskDto } from "../core/websocket/poker-messages";
 
 export interface CurrentUser {
     userId: string;
@@ -13,7 +13,7 @@ export class RoomStore {
     private readonly ws = inject(WebsocketService);
 
     // Stato privato scrivibile solo da qui
-    private readonly _preset = signal<string>('fibonacci');
+    private readonly _preset = signal<'fibonacci' | 'tshirt'>('fibonacci');
     private readonly _revealed = signal<boolean>(false);
     private readonly _activeTaskId= signal<string | null>(null);
     private readonly _tasks = signal<TaskDto[]>([]);
@@ -47,6 +47,10 @@ export class RoomStore {
         return voters.length > 0 && voters.every((p) => p.hasVoted);
     });
 
+    readonly cards = computed(() => {
+        return CardPresets[this._preset()] || [];
+    });
+
     constructor() {
         this.ws.onMessage((msg) => this.applyServerMessage(msg));
     }
@@ -73,6 +77,10 @@ export class RoomStore {
 
     reset(): void {
         this.ws.send({ type: 'reset' });
+    }
+
+    resetTasks(): void {
+        this.ws.send({ type: 'resetTasks' });
     }
 
     changePreset(preset: string): void {

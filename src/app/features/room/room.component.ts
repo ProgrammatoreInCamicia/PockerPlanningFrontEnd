@@ -3,10 +3,13 @@ import { ActivatedRoute } from '@angular/router';
 import { CurrentUser, RoomStore } from '../../state/room.store';
 import { loadSession, saveSession } from '../../core/session/session.store';
 import { FormsModule } from '@angular/forms';
+import { VotingPanelComponent } from './components/voting-panel/voting-panel.component';
+import { TaskListComponent } from './components/task-list/task-list.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-room',
-  imports: [FormsModule],
+  imports: [CommonModule, FormsModule, VotingPanelComponent, TaskListComponent],
   templateUrl: './room.component.html',
   styleUrl: './room.component.scss',
 })

@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Service } from "@angular/core";
-import { firstValueFrom } from "rxjs";
+import { firstValueFrom, Observable } from "rxjs";
 
 interface CreateRoomResponse {
   roomId: string;
@@ -16,5 +16,11 @@ export class RoomApiService {
             this.http.post<CreateRoomResponse>(this.baseUrl, {})
         );
         return response.roomId;
+    }
+
+    importTasks(roomId: string, file: File,): Observable<void> {
+        const formData = new FormData();
+        formData.append('file', file);
+        return this.http.post<void>(`${this.baseUrl}/${roomId}/importTasks`, formData)
     }
 }

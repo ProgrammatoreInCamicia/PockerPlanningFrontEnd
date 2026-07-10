@@ -1,0 +1,40 @@
+.task-container {
+    height: 100%;
+    background-color: #1a2935;
+    color: #fff;
+    .header {
+        padding: 20px;
+        font-size: 20px;
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        align-items: center;
+        h3 {
+            flex: 1;
+        }
+    }
+    ul {
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .task-item {
+        display: flex;
+        padding: 10px;
+        border-radius: 4px;
+        background-color: #2a3b4c;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        &:hover {
+            background-color: #3a4b5c;
+        }
+        &.selected {
+            background-color: #5b6cff;
+        }
+        &.disabled {
+            cursor: not-allowed;
+        }
+    }
+}
+
