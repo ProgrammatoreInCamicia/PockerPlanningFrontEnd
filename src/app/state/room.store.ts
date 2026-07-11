@@ -131,7 +131,7 @@ export class RoomStore {
                     this._selectedVote.set(null);
                 }
                 break;
-            case 'voteRevealed':
+            case 'votesRevealed':
                 // I voti finali sono già dentro activeTask.lastVotes grazie al roomState
                 // che arriva subito dopo (il backend manda entrambi in sequenza).
                 // Non serve stato separato qui, ma lasciamo il case esplicito per chiarezza

@@ -40,7 +40,7 @@ export interface RoomStateMessage {
 }
 
 export interface VotesRevealedMessage {
-    type: 'voteRevealed',
+    type: 'votesRevealed',
     votes: VoteResultDto[];
 }
 
