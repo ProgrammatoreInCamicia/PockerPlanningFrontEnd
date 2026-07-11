@@ -16,9 +16,9 @@ export interface ParticipantDto {
 }
 
 export interface VoteResultDto {
-    UserId: string;
-    UserName: string;
-    Value: string | null;
+    userId: string;
+    userName: string;
+    value: string | null;
 }
 
 export type TaskStatus = "Pending" | "Voting" | "Voted";

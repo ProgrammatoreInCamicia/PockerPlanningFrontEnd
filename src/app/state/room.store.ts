@@ -56,7 +56,7 @@ export class RoomStore {
     readonly userVotes = computed(() => {
         const activeTask = this.activeTask();
         const userVotes = new Map<string, string | null>();
-        activeTask?.lastVotes?.forEach(v => userVotes.set(v.UserId, v.Value)); 
+        activeTask?.lastVotes?.forEach(v => userVotes.set(v.userId, v.value)); 
         return userVotes;
     });
 
@@ -64,11 +64,11 @@ export class RoomStore {
         const activeTask = this.activeTask();
         const groupedVotes = new Map<string | null, number>();
         activeTask?.lastVotes?.forEach(vote => {
-            if (groupedVotes.has(vote.Value))
+            if (groupedVotes.has(vote.value))
             {
-                groupedVotes.set(vote.Value, groupedVotes.get(vote.Value)! + 1);
+                groupedVotes.set(vote.value, groupedVotes.get(vote.value)! + 1);
             } else {
-                groupedVotes.set(vote.Value, 1);
+                groupedVotes.set(vote.value, 1);
             }
         });
         return groupedVotes;
