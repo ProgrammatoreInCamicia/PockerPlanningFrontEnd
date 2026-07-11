@@ -20,7 +20,8 @@ export class RoomStore {
     private readonly _participants = signal<ParticipantDto[]>([]);
     private readonly _currentUser = signal<CurrentUser | null>(null);
     private readonly _lastError = signal<string | null>(null);
-
+    private readonly _selectedVote = signal<string | null>(null);
+    
     // public
     readonly preset = this._preset.asReadonly();
     readonly revealed = this._revealed.asReadonly();
@@ -30,6 +31,7 @@ export class RoomStore {
     readonly currentUser = this._currentUser.asReadonly();
     readonly lastError = this._lastError.asReadonly();
     readonly connectionStatus = this.ws.connectionStatus;
+    readonly selectedVote = this._selectedVote.asReadonly();
 
     // computed
     readonly activeTask = computed<TaskDto | null>(() => {
@@ -51,6 +53,27 @@ export class RoomStore {
         return CardPresets[this._preset()] || [];
     });
 
+    readonly userVotes = computed(() => {
+        const activeTask = this.activeTask();
+        const userVotes = new Map<string, string | null>();
+        activeTask?.lastVotes?.forEach(v => userVotes.set(v.UserId, v.Value)); 
+        return userVotes;
+    });
+
+    readonly groupedVotes = computed(() => {
+        const activeTask = this.activeTask();
+        const groupedVotes = new Map<string | null, number>();
+        activeTask?.lastVotes?.forEach(vote => {
+            if (groupedVotes.has(vote.Value))
+            {
+                groupedVotes.set(vote.Value, groupedVotes.get(vote.Value)! + 1);
+            } else {
+                groupedVotes.set(vote.Value, 1);
+            }
+        });
+        return groupedVotes;
+    })
+
     constructor() {
         this.ws.onMessage((msg) => this.applyServerMessage(msg));
     }
@@ -68,6 +91,7 @@ export class RoomStore {
     }
 
     vote(value: string): void {
+        this._selectedVote.set(value);
         this.ws.send({ type: 'vote', value });
     }
 
@@ -100,6 +124,12 @@ export class RoomStore {
                 this._activeTaskId.set(msg.activeTaskId);
                 this._tasks.set(msg.tasks);
                 this._participants.set(msg.participants);
+                // sincronizza lo stato locale "carta selezionata" con la verità del server:
+                // se il server dice che non ho votato, la mia selezione locale è stantia
+                const me = msg.participants.find((p) => p.userId === this._currentUser()?.userId);
+                if (me && !me.hasVoted) {
+                    this._selectedVote.set(null);
+                }
                 break;
             case 'voteRevealed':
                 // I voti finali sono già dentro activeTask.lastVotes grazie al roomState

@@ -31,7 +31,13 @@
         <h3>Partecipanti</h3>
         <ul>
           @for (p of roomStore.participants(); track p.userName) {
-            <li>{{ p.userName }} — {{ p.role }} — {{ p.connected ? '🟢' : '⚪' }} — {{ p.hasVoted ? 'ha votato' : '...' }}</li>
+            <li>
+              {{ p.userName }} — 
+              {{ p.role }} — 
+              {{ p.connected ? '🟢' : '⚪' }} — 
+              {{ p.hasVoted ? 'ha votato' : '...' }} - 
+              {{ roomStore.userVotes().get(p.userId) }} 
+            </li>
           }
         </ul>
       </div>

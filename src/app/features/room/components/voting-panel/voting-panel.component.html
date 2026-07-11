@@ -4,7 +4,7 @@
             <button 
                 class="card" 
                 (click)="selectCard(card)" 
-                [class.selected]="selectedCard() === card"
+                [class.selected]="roomStore.selectedVote() === card"
                 [disabled]="roomStore.activeTask() == null || roomStore.revealed()"
             >
                 {{ card }}

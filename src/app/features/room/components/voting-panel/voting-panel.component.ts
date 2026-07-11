@@ -9,10 +9,8 @@ import { RoomStore } from '../../../../state/room.store';
 })
 export class VotingPanelComponent {
   readonly roomStore = inject(RoomStore);
-  readonly selectedCard = signal<string | null>(null);
 
   selectCard(card: string): void {
-    this.selectedCard.set(card);
     this.roomStore.vote(card);
   }
 }

@@ -8,6 +8,7 @@ export type OutgoingMessage =
     | { type: 'selectTask'; taskId: string };
 
 export interface ParticipantDto {
+    userId: string;
     userName: string;
     role: 'voter' | 'facilitator';
     hasVoted: boolean;
@@ -15,8 +16,9 @@ export interface ParticipantDto {
 }
 
 export interface VoteResultDto {
-    userName: string;
-    value: string | null;
+    UserId: string;
+    UserName: string;
+    Value: string | null;
 }
 
 export type TaskStatus = "Pending" | "Voting" | "Voted";
