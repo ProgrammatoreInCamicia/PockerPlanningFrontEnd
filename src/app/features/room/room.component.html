@@ -28,7 +28,8 @@
         <p>Connesso come: {{ roomStore.currentUser()?.userName }} ({{ roomStore.currentUser()?.role }})</p>
       </div>
       <div class="participants">
-        <h3>Partecipanti</h3>
+        <app-participants-table />
+        <!-- <h3>Partecipanti</h3>
         <ul>
           @for (p of roomStore.participants(); track p.userName) {
             <li>
@@ -39,7 +40,7 @@
               {{ roomStore.userVotes().get(p.userId) }} 
             </li>
           }
-        </ul>
+        </ul> -->
       </div>
       <app-voting-panel class="cards" />
     </div>

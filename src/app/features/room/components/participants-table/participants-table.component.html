@@ -1,0 +1,44 @@
+<div class="table-container">
+  <div class="table-surface">
+     @if (roomStore.activeTask(); as task) {
+        <div class="active-task-label">
+            <span class="task-title">{{ task.title }}</span>
+        </div>
+    } @else {
+        <div class="active-task-label placeholder">
+            <span>Nessun task selezionato</span>
+        </div>
+    }
+    
+    @if (facilitator(); as fac) {
+      <div class="participant-slot facilitator-slot">
+        <div class="participant-card facilitator-card">
+          <span class="role-icon">🎩</span>
+        </div>
+        <span class="participant-name">{{ fac.userName }}</span>
+      </div>
+    }
+
+    @for (item of positionedVoters(); track item.participant.userId) {
+      <div
+        class="participant-slot"
+        [style.left.%]="item.xPercent"
+        [style.top.%]="item.yPercent"
+      >
+        <div
+          class="participant-card"
+          [class.card-flipped]="hasVoteToShow(item.participant)"
+          [class.not-connected]="!item.participant.connected"
+        >
+          <div class="card-inner">
+            <div class="card-face card-back" [class.has-voted]="item.participant.hasVoted"></div>
+            <div class="card-face card-front">
+              {{ voteValueFor(item.participant) }}
+            </div>
+          </div>
+        </div>
+        <span class="participant-name">{{ item.participant.userName }}</span>
+      </div>
+    }
+  </div>
+</div>
