@@ -3,10 +3,13 @@
         <h3>Tasks</h3>
         @if(roomStore.currentUser()?.role === 'facilitator') {
             <input #fileInput type="file" (change)="onFileSelected($event)" accept=".csv" hidden/>
-            <button title="Import tasks" class="action-button" (click)="importTasks()" [disabled]="importing()">
-                {{ importing() ? '⏳' : '📂' }}
-            </button>
-            <button title="Reset tasks" class="action-button" (click)="roomStore.resetTasks()" [disabled]="roomStore.tasks()?.length === 0">
+            <button title="Import tasks" class="action-button" (click)="openFilePicker()" [disabled]="importing()">📂</button>
+            <button 
+                title="Reset tasks" 
+                class="action-button" 
+                (click)="roomStore.resetTasks()" 
+                [disabled]="roomStore.tasks()?.length === 0"
+            >
                 🗑️
             </button>
         }
@@ -15,15 +18,65 @@
     @if (importError()) {
         <p class="import-error">{{ importError() }}</p>
     }
+
+    @if (pendingFile()) {
+        <div class="mapping-form">
+            <p>Colonne trovate nel file, verifica la mappatura:</p>
+
+            <label>
+                Titolo (obbligatorio)
+                <select [(ngModel)]="titleColumn">
+                    @for (h of availableHeaders(); track h) {
+                        <option [value]="h">{{ h }}</option>
+                    }
+                </select>
+            </label>
+
+            <label>
+                Priorità (opzionale)
+                <select [(ngModel)]="priorityColumn">
+                    <option [ngValue]="null">— nessuna —</option>
+                    @for (h of availableHeaders(); track h) {
+                        <option [value]="h">{{ h }}</option>
+                    }
+                </select>
+            </label>
+
+            <label>
+                Link (opzionale)
+                <select [(ngModel)]="linkColumn">
+                    <option [ngValue]="null">— nessuno —</option>
+                    @for (h of availableHeaders(); track h) {
+                        <option [value]="h">{{ h }}</option>
+                    }
+                </select>
+            </label>
+
+            <div class="mapping-actions">
+                <button (click)="confirmImport()" [disabled]="!titleColumn() || importing()">
+                    {{ importing() ? 'Importazione...' : 'Importa' }}
+                </button>
+                <button (click)="cancelImport()">Annulla</button>
+            </div>
+        </div>
+    }
+
     <ul>
-        <li 
-            class="task-item" 
-            *ngFor="let task of roomStore.tasks()" 
-            (click)="selectTask(task)" 
-            [class.selected]="roomStore.activeTask()?.id === task.id"
-            [class.disabled]="roomStore.currentUser()?.role === 'voter'"
-        >
-            {{ task.title }}
-        </li>
+        @for (task of roomStore.tasks(); track task.id) {
+            <li 
+                class="task-item" 
+                (click)="selectTask(task)" 
+                [class.selected]="roomStore.activeTask()?.id === task.id"
+                [class.disabled]="roomStore.currentUser()?.role === 'voter'"
+            >
+                @if (task.metadata['priority']; as priority) {
+                    <span class="priority-badge">{{ priority }}</span>
+                }
+                 <span class="task-title">{{ task.title }}</span>
+                @if (task.metadata['link']; as link) {
+                    <a [href]="link" target="_blank" rel="noopener" class="task-link" (click)="$event.stopPropagation()">🔗</a>
+                }
+            </li>
+        }
     </ul>
 </div>

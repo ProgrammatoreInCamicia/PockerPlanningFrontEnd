@@ -28,6 +28,7 @@ export interface TaskDto {
     title: string;
     status: TaskStatus;
     lastVotes: VoteResultDto[] | null;
+    metadata: Record<string, string>;
 }
 
 export interface RoomStateMessage {

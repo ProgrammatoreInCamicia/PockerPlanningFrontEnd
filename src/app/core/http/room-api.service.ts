@@ -18,9 +18,17 @@ export class RoomApiService {
         return response.roomId;
     }
 
-    importTasks(roomId: string, file: File,): Observable<void> {
+    importTasks(
+        roomId: string, 
+        file: File,
+        mapping: { titleColumn: string; priorityColumn: string | null; linkColumn: string | null }
+    ): Observable<void> {
         const formData = new FormData();
         formData.append('file', file);
+        formData.append('titleColumn', mapping.titleColumn);
+        if (mapping.priorityColumn) formData.append('priorityColumn', mapping.priorityColumn);
+        if (mapping.linkColumn) formData.append('linkColumn', mapping.linkColumn);
+
         return this.http.post<void>(`${this.baseUrl}/${roomId}/importTasks`, formData)
     }
 }
