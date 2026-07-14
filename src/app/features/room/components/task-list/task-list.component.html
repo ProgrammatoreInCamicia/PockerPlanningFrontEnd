@@ -3,8 +3,8 @@
         <h3>Tasks</h3>
         @if(roomStore.currentUser()?.role === 'facilitator') {
             <input #fileInput type="file" (change)="onFileSelected($event)" accept=".csv" hidden/>
-            <button title="Import tasks" class="action-button" (click)="importTasks()">
-                📂
+            <button title="Import tasks" class="action-button" (click)="importTasks()" [disabled]="importing()">
+                {{ importing() ? '⏳' : '📂' }}
             </button>
             <button title="Reset tasks" class="action-button" (click)="roomStore.resetTasks()" [disabled]="roomStore.tasks()?.length === 0">
                 🗑️
@@ -12,6 +12,9 @@
         }
         
     </div>
+    @if (importError()) {
+        <p class="import-error">{{ importError() }}</p>
+    }
     <ul>
         <li 
             class="task-item" 

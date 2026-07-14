@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, input, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, input, signal, ViewChild } from '@angular/core';
 import { RoomStore } from '../../../../state/room.store';
 import { TaskDto } from '../../../../core/websocket/poker-messages';
 import { RoomApiService } from '../../../../core/http/room-api.service';
@@ -16,13 +16,18 @@ export class TaskListComponent {
   readonly roomStore = inject(RoomStore);
   readonly roomApiService = inject(RoomApiService);
 
+  readonly importing = signal(false);
+  readonly importError = signal<string | null>(null);
+
   roomId = input("");
 
   selectTask(task: TaskDto): void {
+    if (this.roomStore.currentUser()?.role !== 'facilitator') return;
     this.roomStore.selectTask(task.id);
   }
 
   importTasks(): void {
+    this.importError.set(null);
     this.taskFileInput.nativeElement.click();
   }
 
@@ -30,9 +35,30 @@ export class TaskListComponent {
     const target = event.target as HTMLInputElement;
     if (target.files && target.files.length > 0) {
       const file = target.files[0];
+      this.importing.set(true);
+      this.importError.set(null);
+
       this.roomApiService.importTasks(this.roomId(), file).subscribe({
-      // Handle file selection logic here
+        next: () => {
+          this.importing.set(false);
+        },
+        error: (err) => {
+          console.error("Errore import CSV: ", err);
+          this.importing.set(false);
+          this.importError.set(this.describeError(err));
+        }
       });
+      // reset del value per permettere di ricaricare lo stesso file (es. dopo una correzione)
+      target.value = '';
     }
+  }
+
+  private describeError(err: unknown): string {
+    if (err && typeof err === 'object' && 'status' in err) {
+      const status = (err as { status: number }).status;
+      if (status === 404) return 'Stanza non trovata';
+      if (status === 400) return 'File CSV non valido';
+    }
+    return 'Errore durante il caricamento del file';
   }
 }
