@@ -1,0 +1,11 @@
+<dialog #dialog (close)="onNativeClose()" (click)="onBackdropClick($event)">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h3>{{ title() }}</h3>
+            <button class="modal-close" (click)="dialogRef()?.nativeElement?.close()" aria-label="Chiudi">✕</button>
+        </div>
+        <div class="modal-body">
+            <ng-content />
+        </div>
+    </div>
+</dialog>

@@ -4,10 +4,11 @@ import { TaskDto } from '../../../../core/websocket/poker-messages';
 import { RoomApiService } from '../../../../core/http/room-api.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ModalComponent } from '../../../../shared/modal/modal.component';
 
 @Component({
   selector: 'app-task-list',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ModalComponent],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.scss',
 })

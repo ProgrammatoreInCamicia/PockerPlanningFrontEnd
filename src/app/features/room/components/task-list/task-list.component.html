@@ -19,7 +19,7 @@
         <p class="import-error">{{ importError() }}</p>
     }
 
-    @if (pendingFile()) {
+    <!-- @if (pendingFile()) {
         <div class="mapping-form">
             <p>Colonne trovate nel file, verifica la mappatura:</p>
 
@@ -59,7 +59,7 @@
                 <button (click)="cancelImport()">Annulla</button>
             </div>
         </div>
-    }
+    } -->
 
     <ul>
         @for (task of roomStore.tasks(); track task.id) {
@@ -80,3 +80,45 @@
         }
     </ul>
 </div>
+
+<app-modal [open]="pendingFile() !== null" title="Mappatura colonne CSV" (closed)="cancelImport()">
+    <div class="mapping-form">
+        <p>Colonne trovate nel file, verifica la mappatura:</p>
+
+        <label>
+            Titolo (obbligatorio)
+            <select [(ngModel)]="titleColumn">
+                @for (h of availableHeaders(); track h) {
+                    <option [value]="h">{{ h }}</option>
+                }
+            </select>
+        </label>
+
+        <label>
+            Priorità (opzionale)
+            <select [(ngModel)]="priorityColumn">
+                <option [ngValue]="null">— nessuna —</option>
+                @for (h of availableHeaders(); track h) {
+                    <option [value]="h">{{ h }}</option>
+                }
+            </select>
+        </label>
+
+        <label>
+            Link (opzionale)
+            <select [(ngModel)]="linkColumn">
+                <option [ngValue]="null">— nessuno —</option>
+                @for (h of availableHeaders(); track h) {
+                    <option [value]="h">{{ h }}</option>
+                }
+            </select>
+        </label>
+
+        <div class="mapping-actions">
+            <button class="action-button" (click)="confirmImport()" [disabled]="!titleColumn() || importing()">
+                {{ importing() ? 'Importazione...' : 'Importa' }}
+            </button>
+            <button (click)="cancelImport()">Annulla</button>
+        </div>
+    </div>
+</app-modal>
