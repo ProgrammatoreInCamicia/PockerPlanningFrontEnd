@@ -1,6 +1,6 @@
 <div class="task-container">
     <div class="header">
-        <h3>Tasks</h3>
+        <h2>Tasks</h2>
         @if(roomStore.currentUser()?.role === 'facilitator') {
             <input #fileInput type="file" (change)="onFileSelected($event)" accept=".csv" hidden/>
             <button title="Import tasks" class="action-button" (click)="openFilePicker()" [disabled]="importing()">📂</button>

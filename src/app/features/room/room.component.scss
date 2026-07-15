@@ -28,7 +28,7 @@
                 flex-direction: column;
                 gap: 0.2rem;
 
-                h2 {
+                h1 {
                     margin: 0;
                     font-size: 1.3rem;
                     color: var(--text-primary);
@@ -36,7 +36,7 @@
 
                 .header-user {
                     font-size: 0.95rem;
-                    color: var(--text-secondary);
+                    color: var(--text-primary);
                     font-weight: 600;
                     display: flex;
                     align-items: center;
@@ -51,7 +51,7 @@
                     padding: 0.15rem 0.5rem;
                     border-radius: 999px;
                     background: var(--border-color);
-                    color: var(--text-secondary);
+                    color: var(--text-primary);
 
                     &.facilitator {
                         background: var(--accent);

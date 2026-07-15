@@ -23,9 +23,9 @@
 } @else {
   <div class="room-content">
     <div class="room-main-content">
-      <div class="header">
+      <header class="header">
         <div class="header-info">
-          <h2>{{ displayRoomName() }}</h2>
+          <h1>{{ displayRoomName() }}</h1>
           <span class="header-user">
             {{ roomStore.currentUser()?.userName }}
             <span class="role-tag" [class.facilitator]="roomStore.currentUser()?.role === 'facilitator'">
@@ -37,17 +37,17 @@
           <app-connection-badge />
           <app-theme-toggle />
         </div>
-      </div>
-      <div class="participants">
+      </header>
+      <main class="participants">
         <app-participants-table />
-      </div>
+      </main>
 
       <app-voting-panel class="cards" />
     </div>
 
-    <div class="room-sidebar">
+    <aside class="room-sidebar">
       <app-task-list [roomId]="roomId()" />
-    </div>
+    </aside>
 
     
   </div>
