@@ -10,11 +10,13 @@ import { ParticipantsTableComponent } from './components/participants-table/part
 import { ConnectionBadgeComponent } from '../../shared/connection-badge/connection-badge.component';
 import { ThemeToggleComponent } from '../../shared/theme-toggle/theme-toggle.component';
 import { formatRoomName } from '../../core/utils/room-name-format';
+import { ModalComponent } from '../../shared/modal/modal.component';
 
 @Component({
   selector: 'app-room',
   imports: [CommonModule, FormsModule, VotingPanelComponent, 
-    TaskListComponent, ParticipantsTableComponent, ConnectionBadgeComponent, ThemeToggleComponent],
+    TaskListComponent, ParticipantsTableComponent, ConnectionBadgeComponent, 
+    ThemeToggleComponent, ModalComponent],
   templateUrl: './room.component.html',
   styleUrl: './room.component.scss',
 })

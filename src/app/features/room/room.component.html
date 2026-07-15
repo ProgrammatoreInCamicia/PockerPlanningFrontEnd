@@ -1,27 +1,5 @@
-@if (needsName()) {
-  <div class="name-prompt">
-    <h2>Ti sei collegato alla stanza "{{ roomId() }}"</h2>
-    <p>Inserisci il tuo nome per partecipare</p>
-
-    <input
-      type="text"
-      [(ngModel)]="voterName"
-      placeholder="Il tuo nome"
-      (keydown.enter)="submitVoterName()"
-    />
-
-    <button (click)="submitVoterName()" [disabled]="!voterName().trim() || joining()">
-      {{ joining() ? 'Connessione...' : 'Entra' }}
-    </button>
-
-    @if (joinError()) {
-      <p class="error">{{ joinError() }}</p>
-    }
-  </div>
-} @else if (joining()) {
-  <p>Connessione in corso...</p>
-} @else {
-  <div class="room-content">
+<div class="room-content" [class.blurred]="needsName()">
+  @if (!needsName() && !joining()) {
     <div class="room-main-content">
       <header class="header">
         <div class="header-info">
@@ -41,14 +19,41 @@
       <main class="participants">
         <app-participants-table />
       </main>
-
+  
       <app-voting-panel class="cards" />
     </div>
-
+  
     <aside class="room-sidebar">
       <app-task-list [roomId]="roomId()" />
     </aside>
+  }
 
-    
+  @if (joining() && !needsName()) {
+    <p class="connecting-message">Connessione in corso...</p>
+  }
+</div>
+<app-modal [open]="needsName()" [closable]="false" title="Unisciti alla stanza">
+  <div class="join-prompt">
+    <p>Ti sei collegato alla stanza <strong>{{ displayRoomName() }}</strong>. Inserisci il tuo nome per partecipare.</p>
+
+    <input
+      type="text"
+      [(ngModel)]="voterName"
+      placeholder="Il tuo nome"
+      (keydown.enter)="submitVoterName()"
+      class="name-input"
+    />
+
+    <button
+      class="action-button submit-button"
+      (click)="submitVoterName()"
+      [disabled]="!voterName().trim() || joining()"
+    >
+      {{ joining() ? 'Connessione...' : 'Entra' }}
+    </button>
+
+    @if (joinError()) {
+      <p class="error-message">{{ joinError() }}</p>
+    }
   </div>
-}
+</app-modal>

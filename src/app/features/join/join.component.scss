@@ -3,15 +3,15 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: #f4f5f7;
-  font-family: system-ui, -apple-system, sans-serif;
+  background: var(--bg-secondary);
 }
 
 .join-card {
-  background: white;
-  border-radius: 12px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
   padding: 2.5rem;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 20px var(--shadow-color);
   width: 100%;
   max-width: 380px;
   text-align: center;
@@ -20,50 +20,53 @@
 h1 {
   margin: 0 0 0.5rem;
   font-size: 1.5rem;
-  color: #1a1a1a;
+  color: var(--text-primary);
 }
 
 p {
   margin: 0 0 1.5rem;
-  color: #666;
+  color: var(--text-secondary);
   font-size: 0.9rem;
 }
 
 .name-input {
   width: 100%;
   padding: 0.75rem 1rem;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--bg-elevated);
+  color: var(--text-primary);
   font-size: 1rem;
   box-sizing: border-box;
   margin-bottom: 1rem;
-}
 
-.name-input:focus {
-  outline: none;
-  border-color: #5b6cff;
+  &:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
 }
 
 .create-button {
   width: 100%;
   padding: 0.75rem 1rem;
-  background: #5b6cff;
-  color: white;
+  background: var(--accent);
+  color: var(--accent-text);
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.15s;
-}
 
-.create-button:hover:not(:disabled) {
-  background: #4a58e0;
-}
+  &:hover:not(:disabled) {
+    background: var(--accent-hover);
+  }
 
-.create-button:disabled {
-  background: #c5c9d6;
-  cursor: not-allowed;
+  &:disabled {
+    background: var(--card-disabled-bg);
+    color: var(--card-disabled-text);
+    cursor: not-allowed;
+  }
 }
 
 .error-message {
