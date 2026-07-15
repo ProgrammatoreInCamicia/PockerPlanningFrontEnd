@@ -6,31 +6,36 @@
     padding: 10px;
     justify-content: center;
     .card {
-        height: 80px;
-        width: 50px;
-        background-color: #f0f0f0;
-        border: 2px solid #ccc;
-        border-radius: 4px;
-        color: #333;
+        height: 84px;
+        width: 54px;
+        background-color: var(--card-bg);
+        border: 2px solid var(--card-border);
+        border-radius: var(--radius-md);
+        color: var(--card-text);
         font-size: 20px;
-        transition: all .09s linear;
+        font-weight: 600;
+        box-shadow: 0 2px 6px var(--shadow-color);
+        transition: all 0.12s ease;
         &.selected {
-            margin-top: -2px;
-            background-color: #007bff;
-            color: #fff;
-            border-color: #007bff;
+            margin-top: -4px;
+            background-color: var(--accent);
+            color: var(--accent-text);
+            border-color: var(--accent-hover);
+            box-shadow: 0 4px 12px var(--shadow-color);
             pointer-events: none;
         }
         &:hover {
             cursor: pointer;
-            background-color: #e0e0e0;
-            margin-top: -2px;
+            background-color: var(--card-hover-bg);;
+            margin-top: -3px;
+            box-shadow: 0 4px 10px var(--shadow-color);
         }
     }
     .card:disabled {
-        background-color: #e0e0e0;
-        color: #999;
-        border-color: #ccc;
+        background-color: var(--card-disabled-bg);
+        color: var(--card-disabled-text);
+        border-color: var(--card-border);
+        box-shadow: none;
         pointer-events: none;
     }
 }

@@ -1,38 +1,91 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
 .room-content {
     height: 100%;
     display: flex;
     flex-direction: row;
-    gap: 10px;
+    gap: 0;
     .room-main-content {
         flex: 1;
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        min-width: 0;
+
+        .header {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            background: var(--bg-elevated);
+            border-bottom: 1px solid var(--border-color);
+
+            .header-info {
+                display: flex;
+                flex-direction: column;
+                gap: 0.2rem;
+
+                h2 {
+                    margin: 0;
+                    font-size: 1.3rem;
+                    color: var(--text-primary);
+                }
+
+                .header-user {
+                    font-size: 0.95rem;
+                    color: var(--text-secondary);
+                    font-weight: 600;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                }
+
+                .role-tag {
+                    font-size: 0.7rem;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    letter-spacing: 0.03em;
+                    padding: 0.15rem 0.5rem;
+                    border-radius: 999px;
+                    background: var(--border-color);
+                    color: var(--text-secondary);
+
+                    &.facilitator {
+                        background: var(--accent);
+                        color: var(--accent-text);
+                    }
+                }
+            }
+
+            .header-actions {
+                display: flex;
+                align-items: center;
+                gap: 0.6rem;
+            }
+        }
+            
         .participants {
             flex: 1;
+            min-height: 0; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            overflow: auto;
+        }
+
+        .cards {
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-elevated);
         }
     }
     .room-sidebar {
         width: 350px;
+        flex-shrink: 0;
+        border-left: 1px solid var(--border-color);
     }
-    // display: grid;
-    // grid-template-areas:
-    //     "header header"
-    //     "content menu"
-    //     "footer footer";
-    // grid-template-columns: 4fr 1fr;
-    // grid-template-rows: 1fr 6fr;
-    // gap: 10px;
-    // .header {
-    //     grid-area: header;
-    // }
-    // .participants {
-    //     grid-area: content;
-    // }
-    // .panel {
-    //     grid-area: menu;
-    // }
-    // .cards {
-    //     grid-area: footer;
-    // }
 }

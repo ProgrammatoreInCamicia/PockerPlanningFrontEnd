@@ -24,35 +24,29 @@
   <div class="room-content">
     <div class="room-main-content">
       <div class="header">
-        <app-connection-badge />
-        <h2>Stanza: {{ roomId() }}</h2>
-        <p>Connesso come: {{ roomStore.currentUser()?.userName }} ({{ roomStore.currentUser()?.role }})</p>
+        <div class="header-info">
+          <h2>{{ displayRoomName() }}</h2>
+          <span class="header-user">
+            {{ roomStore.currentUser()?.userName }}
+            <span class="role-tag" [class.facilitator]="roomStore.currentUser()?.role === 'facilitator'">
+              {{ roomStore.currentUser()?.role === 'facilitator' ? 'Facilitator' : 'Voter' }}
+            </span>
+          </span>
+        </div>
+        <div class="header-actions">
+          <app-connection-badge />
+          <app-theme-toggle />
+        </div>
       </div>
       <div class="participants">
         <app-participants-table />
-        <!-- <h3>Partecipanti</h3>
-        <ul>
-          @for (p of roomStore.participants(); track p.userName) {
-            <li>
-              {{ p.userName }} — 
-              {{ p.role }} — 
-              {{ p.connected ? '🟢' : '⚪' }} — 
-              {{ p.hasVoted ? 'ha votato' : '...' }} - 
-              {{ roomStore.userVotes().get(p.userId) }} 
-            </li>
-          }
-        </ul> -->
       </div>
+
       <app-voting-panel class="cards" />
     </div>
+
     <div class="room-sidebar">
       <app-task-list [roomId]="roomId()" />
-      <!-- <h3>Task</h3>
-      <ul>
-        @for (t of roomStore.tasks(); track t.id) {
-          <li>{{ t.title }} — {{ t.status }}</li>
-        }
-      </ul> -->
     </div>
 
     

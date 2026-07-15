@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CurrentUser, RoomStore } from '../../state/room.store';
 import { loadSession, saveSession } from '../../core/session/session.store';
@@ -8,11 +8,13 @@ import { TaskListComponent } from './components/task-list/task-list.component';
 import { CommonModule } from '@angular/common';
 import { ParticipantsTableComponent } from './components/participants-table/participants-table.component';
 import { ConnectionBadgeComponent } from '../../shared/connection-badge/connection-badge.component';
+import { ThemeToggleComponent } from '../../shared/theme-toggle/theme-toggle.component';
+import { formatRoomName } from '../../core/utils/room-name-format';
 
 @Component({
   selector: 'app-room',
   imports: [CommonModule, FormsModule, VotingPanelComponent, 
-    TaskListComponent, ParticipantsTableComponent, ConnectionBadgeComponent],
+    TaskListComponent, ParticipantsTableComponent, ConnectionBadgeComponent, ThemeToggleComponent],
   templateUrl: './room.component.html',
   styleUrl: './room.component.scss',
 })
@@ -25,6 +27,9 @@ export class RoomComponent implements OnInit {
   readonly voterName = signal('');
   readonly joining = signal(false);
   readonly joinError = signal<string | null>(null);
+
+  readonly displayRoomName = computed(() => formatRoomName(this.roomId()));
+
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('roomId');
