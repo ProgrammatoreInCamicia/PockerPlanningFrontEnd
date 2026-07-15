@@ -18,6 +18,18 @@ export class RoomApiService {
         return response.roomId;
     }
 
+    previewCsvHeaders(roomId: string, file: File) {
+        const formData = new FormData();
+        formData.append('file', file);
+        return this.http.post<{
+            headers: string[];
+            delimiter: string;
+            suggestedTitleColumn: string | null;
+            suggestedPriorityColumn: string | null;
+            suggestedLinkColumn: string | null;
+        }>(`${this.baseUrl}/${roomId}/previewCsvHeaders`, formData);
+    }
+
     importTasks(
         roomId: string, 
         file: File,

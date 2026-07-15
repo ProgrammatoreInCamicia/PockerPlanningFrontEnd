@@ -3,7 +3,6 @@ import { RoomStore } from '../../../../state/room.store';
 import { TaskDto } from '../../../../core/websocket/poker-messages';
 import { RoomApiService } from '../../../../core/http/room-api.service';
 import { CommonModule } from '@angular/common';
-import { parseCsvHeaders, suggestMapping } from '../../../../core/csv/csv-headers';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -41,41 +40,28 @@ export class TaskListComponent {
 
   async onFileSelected(event: Event): Promise<void> {
     const target = event.target as HTMLInputElement;
-    if (target.files && target.files.length > 0) {
-      const file = target.files[0];
+    if (!target.files || target.files.length === 0) return;
 
-      // reset del value per permettere di ricaricare lo stesso file (es. dopo una correzione)
-      target.value = '';
+    const file = target.files[0];
 
-      // this.importing.set(true);
-      // this.importError.set(null);
+    // reset del value per permettere di ricaricare lo stesso file (es. dopo una correzione)
+    target.value = '';
 
-      try {
-        const headers = await parseCsvHeaders(file);
-        const suggestion = suggestMapping(headers);
+    this.importError.set(null);
 
+    this.roomApiService.previewCsvHeaders(this.roomId(), file).subscribe({
+      next: (res) => {
         this.pendingFile.set(file);
-        this.availableHeaders.set(headers);
-        this.titleColumn.set(suggestion.titleColumn);
-        this.priorityColumn.set(suggestion.priorityColumn);
-        this.linkColumn.set(suggestion.linkColumn);
-      } catch (err) {
+        this.availableHeaders.set(res.headers);
+        this.titleColumn.set(res.suggestedTitleColumn ?? res.headers[0] ?? '');
+        this.priorityColumn.set(res.suggestedPriorityColumn);
+        this.linkColumn.set(res.suggestedLinkColumn);
+      },
+      error: (err) => {
         console.error('Errore lettura file:', err);
         this.importError.set('Impossibile leggere il file');
-      }
-
-      // this.roomApiService.importTasks(this.roomId(), file).subscribe({
-      //   next: () => {
-      //     this.importing.set(false);
-      //   },
-      //   error: (err) => {
-      //     console.error("Errore import CSV: ", err);
-      //     this.importing.set(false);
-      //     this.importError.set(this.describeError(err));
-      //   }
-      // });
-      
-    }
+      },
+    });     
   }
 
   cancelImport(): void {
