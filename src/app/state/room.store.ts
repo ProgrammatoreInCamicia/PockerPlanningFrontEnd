@@ -76,6 +76,7 @@ export class RoomStore {
 
     constructor() {
         this.ws.onMessage((msg) => this.applyServerMessage(msg));
+        this.ws.onReconnected(() => this.rejoinAfterReconnect());
     }
 
     // azioni pubbliche 
@@ -141,5 +142,17 @@ export class RoomStore {
                 this._lastError.set(msg.message);
                 break;
         };
+    }
+
+    private rejoinAfterReconnect(): void {
+        const user = this._currentUser();
+        if (!user) return;
+
+        this.ws.send({
+            type: 'join',
+            userId: user.userId,
+            userName: user.userName,
+            role: user.role,
+        });
     }
 }

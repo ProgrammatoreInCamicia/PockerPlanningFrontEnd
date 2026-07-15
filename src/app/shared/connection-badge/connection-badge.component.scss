@@ -1,0 +1,34 @@
+.connection-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.06);
+
+    .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #999;
+    }
+
+    &[data-status='connected'] .dot { 
+        background: #2ecc71; 
+    }
+    &[data-status='connecting'] .dot,
+    &[data-status='reconnecting'] .dot {
+        background: #f39c12;
+        animation: pulse 1s infinite;
+    }
+    &[data-status='error'] .dot,
+    &[data-status='disconnected'] .dot { 
+        background: #e74c3c; 
+    }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}

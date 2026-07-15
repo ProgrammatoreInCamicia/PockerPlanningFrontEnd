@@ -7,11 +7,12 @@ import { VotingPanelComponent } from './components/voting-panel/voting-panel.com
 import { TaskListComponent } from './components/task-list/task-list.component';
 import { CommonModule } from '@angular/common';
 import { ParticipantsTableComponent } from './components/participants-table/participants-table.component';
+import { ConnectionBadgeComponent } from '../../shared/connection-badge/connection-badge.component';
 
 @Component({
   selector: 'app-room',
   imports: [CommonModule, FormsModule, VotingPanelComponent, 
-    TaskListComponent, ParticipantsTableComponent],
+    TaskListComponent, ParticipantsTableComponent, ConnectionBadgeComponent],
   templateUrl: './room.component.html',
   styleUrl: './room.component.scss',
 })

@@ -24,6 +24,7 @@
   <div class="room-content">
     <div class="room-main-content">
       <div class="header">
+        <app-connection-badge />
         <h2>Stanza: {{ roomId() }}</h2>
         <p>Connesso come: {{ roomStore.currentUser()?.userName }} ({{ roomStore.currentUser()?.role }})</p>
       </div>
