@@ -33,6 +33,7 @@
       >
         <div
           class="participant-card"
+          [attr.data-emoji-target]="item.participant.userId"
           [class.card-flipped]="hasVoteToShow(item.participant)"
           [class.not-connected]="!item.participant.connected"
         >

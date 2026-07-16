@@ -8,6 +8,18 @@ export interface CurrentUser {
     role: 'voter' | 'facilitator';
 }
 
+export interface VoteStats {
+  distribution: { value: string; count: number; percentage: number }[];
+  numericVotes: number[];
+  average: number | null;
+  median: number | null;
+  min: number | null;
+  max: number | null;
+  totalVotes: number;
+  hasFullConsensus: boolean;
+  hasWideSpread: boolean; // min/max distanti, segnale di forte disaccordo
+}
+
 @Service()
 export class RoomStore {
     private readonly ws = inject(WebsocketService);
@@ -75,6 +87,60 @@ export class RoomStore {
         });
         return groupedVotes;
     })
+
+    readonly voteStats = computed<VoteStats | null>(() => {
+        const task = this.activeTask();
+        if (!task?.lastVotes || task.lastVotes.length === 0) return null;
+
+        const values = task.lastVotes
+            .map((v) => v.value)
+            .filter((v): v is string => v !== null);
+
+        if (values.length === 0) return null;
+
+        const counts = new Map<string, number>();
+        for (const v of values) {
+            counts.set(v, (counts.get(v) ?? 0) + 1);
+        }
+
+        const distribution = Array.from(counts.entries())
+            .map(([value, count]) => ({
+                value,
+                count,
+                percentage: Math.round((count / values.length) * 100),
+            }))
+            .sort((a, b) => b.count - a.count);
+
+        const numericVotes = values
+            .map((v) => parseFloat(v))
+            .filter((n) => !isNaN(n))
+            .sort((a, b) => a - b);
+
+        const average = numericVotes.length > 0
+            ? numericVotes.reduce((sum, n) => sum + n, 0) / numericVotes.length
+            : null;
+
+        const median = numericVotes.length > 0
+            ? numericVotes.length % 2 === 0
+            ? (numericVotes[numericVotes.length / 2 - 1] + numericVotes[numericVotes.length / 2]) / 2
+            : numericVotes[Math.floor(numericVotes.length / 2)]
+            : null;
+
+        const min = numericVotes.length > 0 ? numericVotes[0] : null;
+        const max = numericVotes.length > 0 ? numericVotes[numericVotes.length - 1] : null;
+
+        return {
+            distribution,
+            numericVotes,
+            average: average !== null ? Math.round(average * 100) / 100 : null,
+            median,
+            min,
+            max,
+            totalVotes: values.length,
+            hasFullConsensus: distribution.length === 1,
+            hasWideSpread: min !== null && max !== null && numericVotes.length > 1 && (max - min) > average! * 0.75,
+        };
+    });
 
     constructor() {
         this.ws.onMessage((msg) => this.applyServerMessage(msg));

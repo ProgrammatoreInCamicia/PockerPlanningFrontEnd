@@ -1,0 +1,52 @@
+<app-modal [open]="isOpen()" title="Risultati della votazione" (closed)="close()">
+  @if (roomStore.voteStats(); as stats) {
+    <div class="results-content">
+      @if (stats.hasFullConsensus) {
+        <div class="consensus-banner full">
+          🎯 Consenso unanime!
+        </div>
+      } @else if (stats.hasWideSpread) {
+        <div class="consensus-banner spread">
+          ⚡ Stime molto distanti, discussione consigliata
+        </div>
+      }
+
+      <div class="distribution">
+        @for (d of stats.distribution; track d.value) {
+          <div class="dist-row">
+            <span class="dist-value">{{ d.value }}</span>
+            <div class="dist-bar-track">
+              <div class="dist-bar-fill" [style.width.%]="d.percentage"></div>
+            </div>
+            <span class="dist-count">{{ d.count }}</span>
+          </div>
+        }
+      </div>
+
+      @if (stats.average !== null) {
+        <div class="stats-summary">
+          <div class="stat-box">
+            <span class="stat-label">Media</span>
+            <span class="stat-value">{{ stats.average }}</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">Mediana</span>
+            <span class="stat-value">{{ stats.median }}</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">Min – Max</span>
+            <span class="stat-value">{{ stats.min }} – {{ stats.max }}</span>
+          </div>
+        </div>
+      }
+
+      <p class="total-votes">{{ stats.totalVotes }} voti totali</p>
+
+      @if (roomStore.isFacilitator()) {
+        <div class="modal-actions">
+          <button class="action-button" (click)="roomStore.reset()">Rivota</button>
+        </div>
+      }
+    </div>
+  }
+</app-modal>

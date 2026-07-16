@@ -34,8 +34,8 @@ export class EmojiFlyOverlayComponent {
   }
 
   private spawn(id: string, emoji: string, fromUserId: string, targetUserId: string): void {
-    const startEl = document.querySelector<HTMLElement>(`[data-participant-id="${fromUserId}"]`);
-    const targetEl = document.querySelector<HTMLElement>(`[data-participant-id="${targetUserId}"]`);
+    const startEl = document.querySelector<HTMLElement>(`[data-emoji-target="${fromUserId}"]`);
+    const targetEl = document.querySelector<HTMLElement>(`[data-emoji-target="${targetUserId}"]`);
     if (!targetEl) return;
 
     const start = startEl ? this.centerOf(startEl) : { x: window.innerWidth / 2, y: -40 };

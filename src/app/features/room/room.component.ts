@@ -12,12 +12,13 @@ import { ThemeToggleComponent } from '../../shared/theme-toggle/theme-toggle.com
 import { formatRoomName } from '../../core/utils/room-name-format';
 import { ModalComponent } from '../../shared/modal/modal.component';
 import { EmojiFlyOverlayComponent } from '../../shared/emoji-fly-overlay/emoji-fly-overlay.component';
+import { ResultsComponent } from './components/results/results.component';
 
 @Component({
   selector: 'app-room',
   imports: [CommonModule, FormsModule, VotingPanelComponent, 
     TaskListComponent, ParticipantsTableComponent, ConnectionBadgeComponent, 
-    ThemeToggleComponent, ModalComponent, EmojiFlyOverlayComponent],
+    ThemeToggleComponent, ModalComponent, EmojiFlyOverlayComponent, ResultsComponent],
   templateUrl: './room.component.html',
   styleUrl: './room.component.scss',
 })
