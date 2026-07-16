@@ -11,8 +11,12 @@
     }
     
     @if (facilitator(); as fac) {
-      <div class="participant-slot facilitator-slot">
-        <div class="participant-card facilitator-card">
+      <div 
+        class="participant-slot facilitator-slot"
+        [attr.data-participant-id]="fac.userId"
+        (click)="togglePicker(fac.userId)"
+      >
+        <div class="participant-card facilitator-card" [attr.data-emoji-target]="fac.userId">
           <span class="role-icon">🎩</span>
         </div>
         <span class="participant-name">{{ fac.userName }}</span>
@@ -24,6 +28,8 @@
         class="participant-slot"
         [style.left.%]="item.xPercent"
         [style.top.%]="item.yPercent"
+        [attr.data-participant-id]="item.participant.userId"
+        (click)="togglePicker(item.participant.userId)"
       >
         <div
           class="participant-card"
@@ -39,6 +45,17 @@
         </div>
         <span class="participant-name">{{ item.participant.userName }}</span>
       </div>
+    }
+
+    @if (openPickerFor(); as targetId) {
+      @if (popoverPosition(); as pos) {
+        <app-emoji-popover
+          class="floating-popover"
+          [style.left.px]="pos.x"
+          [style.top.px]="pos.y"
+          (emojiSelected)="onEmojiSelected(targetId, $event)"
+        />
+      }
     }
   </div>
 </div>

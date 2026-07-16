@@ -1,0 +1,16 @@
+<div class="emoji-popover" (click)="$event.stopPropagation()">
+    <input
+        type="text"
+        [(ngModel)]="query"
+        placeholder="Cerca..."
+        class="emoji-search"
+        autofocus
+    />
+    <div class="emoji-grid">
+        @for (e of results(); track e.char) {
+            <button class="emoji-item" (click)="select(e.char)" [title]="e.keywords[0]">
+                {{ e.char }}
+            </button>
+        }
+    </div>
+</div>

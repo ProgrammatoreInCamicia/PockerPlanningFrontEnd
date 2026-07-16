@@ -1,6 +1,7 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { RoomStore } from '../../../../state/room.store';
 import { ParticipantDto } from '../../../../core/websocket/poker-messages';
+import { EmojiPopoverComponent } from '../../../../shared/emoji-popover/emoji-popover.component';
 
 interface PositionedParticipant {
   participant: ParticipantDto;
@@ -10,7 +11,7 @@ interface PositionedParticipant {
 
 @Component({
   selector: 'app-participants-table',
-  imports: [],
+  imports: [EmojiPopoverComponent],
   templateUrl: './participants-table.component.html',
   styleUrl: './participants-table.component.scss',
 })
@@ -23,6 +24,30 @@ export class ParticipantsTableComponent {
 
   private readonly ASPECT_W = 7; // deve combaciare con aspect-ratio: 7/4 nel CSS
   private readonly ASPECT_H = 4;
+
+  readonly openPickerFor = signal<string | null>(null);
+  readonly popoverPosition = signal<{ x: number; y: number } | null>(null);
+
+  private readonly onDocumentClick = (event: MouseEvent) => {
+    const target = event.target as HTMLElement;
+
+    // se il click è dentro il popover stesso o su una card partecipante, non chiudere qui
+    // (il toggle della card è già gestito dal suo stesso (click), evitiamo doppio-tap)
+    if (target.closest('.floating-popover') || target.closest('[data-participant-id]')) {
+      return;
+    }
+
+    this.closePicker();
+  };
+
+  constructor() {
+    effect((onCleanup) => {
+      if (this.openPickerFor() !== null) {
+        document.addEventListener('click', this.onDocumentClick);
+        onCleanup(() => document.removeEventListener('click', this.onDocumentClick));
+      }
+    });
+  }
 
   private stadiumPoint(s: number, W: number, H: number): { x: number; y: number } {
     const r = H / 2;
@@ -104,5 +129,44 @@ export class ParticipantsTableComponent {
     if (!activeTask?.lastVotes) return null;
     const vote = activeTask.lastVotes.find((v) => v.userId === participant.userId);
     return vote?.value ?? null;
+  }
+
+  togglePicker(userId: string): void {
+    if (this.openPickerFor() === userId) {
+      this.openPickerFor.set(null);
+      this.popoverPosition.set(null);
+      return;
+    }
+
+    this.openPickerFor.set(userId);
+
+    const cardEl = document.querySelector<HTMLElement>(`[data-participant-id="${userId}"]`);
+    if (cardEl) {
+      const rect = cardEl.getBoundingClientRect();
+      const popoverWidth = 220;
+      const popoverHeight = 260;
+
+      let x = rect.left + rect.width / 2 - popoverWidth / 2;
+      let y = rect.bottom + 8;
+
+      // se sfora sotto, aprilo sopra la card
+      if (y + popoverHeight > window.innerHeight) {
+        y = rect.top - popoverHeight - 8;
+      }
+      // clamp orizzontale ai bordi
+      x = Math.max(8, Math.min(x, window.innerWidth - popoverWidth - 8));
+
+      this.popoverPosition.set({ x, y });
+    }
+    // this.openPickerFor.set(this.openPickerFor() === userId ? null : userId);
+  }
+
+  onEmojiSelected(targetUserId: string, emoji: string): void {
+    this.roomStore.throwEmoji(targetUserId, emoji);
+  }
+
+  private closePicker(): void {
+    this.openPickerFor.set(null);
+    this.popoverPosition.set(null);
   }
 }

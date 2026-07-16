@@ -5,7 +5,8 @@ export type OutgoingMessage =
     | { type: 'reset' }
     | { type: 'resetTasks' }
     | { type: 'changePreset'; preset: string }
-    | { type: 'selectTask'; taskId: string };
+    | { type: 'selectTask'; taskId: string }
+    | { type: 'throwEmoji'; targetUserId: string; emoji: string };
 
 export interface ParticipantDto {
     userId: string;
@@ -50,7 +51,15 @@ export interface ErrorMessage {
   message: string;
 }
 
-export type IncomingMessage = RoomStateMessage | VotesRevealedMessage | ErrorMessage;
+export interface EmojiThrownMessage {
+  type: 'emojiThrown';
+  id: string;
+  fromUserId: string;
+  targetUserId: string;
+  emoji: string;
+}
+
+export type IncomingMessage = RoomStateMessage | VotesRevealedMessage | ErrorMessage | EmojiThrownMessage;
 
 export const CardPresets = {
     "fibonacci": ["0", "1", "2", "3", "5", "8", "13", "21", "?", "☕"],

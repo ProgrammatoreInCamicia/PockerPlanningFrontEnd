@@ -1,6 +1,6 @@
 import { computed, inject, Service, signal } from "@angular/core";
 import { WebsocketService } from "../core/websocket/websocket.service";
-import { CardPresets, IncomingMessage, ParticipantDto, TaskDto } from "../core/websocket/poker-messages";
+import { CardPresets, EmojiThrownMessage, IncomingMessage, ParticipantDto, TaskDto } from "../core/websocket/poker-messages";
 
 export interface CurrentUser {
     userId: string;
@@ -21,7 +21,8 @@ export class RoomStore {
     private readonly _currentUser = signal<CurrentUser | null>(null);
     private readonly _lastError = signal<string | null>(null);
     private readonly _selectedVote = signal<string | null>(null);
-    
+    private readonly _lastEmojiThrow = signal<EmojiThrownMessage | null>(null);
+
     // public
     readonly preset = this._preset.asReadonly();
     readonly revealed = this._revealed.asReadonly();
@@ -32,6 +33,7 @@ export class RoomStore {
     readonly lastError = this._lastError.asReadonly();
     readonly connectionStatus = this.ws.connectionStatus;
     readonly selectedVote = this._selectedVote.asReadonly();
+    readonly lastEmojiThrow = this._lastEmojiThrow.asReadonly();
 
     // computed
     readonly activeTask = computed<TaskDto | null>(() => {
@@ -116,6 +118,10 @@ export class RoomStore {
         this.ws.send({ type: 'selectTask', taskId });
     }
 
+    throwEmoji(targetUserId: string, emoji: string): void {
+        this.ws.send({ type: 'throwEmoji', targetUserId, emoji });
+    }
+
     // Messaggi in arrivo dal server
     private applyServerMessage(msg: IncomingMessage): void {
         switch (msg.type) {
@@ -140,6 +146,9 @@ export class RoomStore {
                 break;
             case 'error':
                 this._lastError.set(msg.message);
+                break;
+            case 'emojiThrown':
+                this._lastEmojiThrow.set(msg);
                 break;
         };
     }

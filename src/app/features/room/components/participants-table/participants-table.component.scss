@@ -153,3 +153,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.floating-popover {
+  position: fixed;
+  z-index: 100;
+}

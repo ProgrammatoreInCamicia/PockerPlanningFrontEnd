@@ -1,0 +1,12 @@
+<div class="fly-overlay">
+    @for (f of flying(); track f.id) {
+        <span
+            [id]="'emoji-fly-' + f.id"
+            class="flying-emoji"
+            [style.left.px]="f.anchorX"
+            [style.top.px]="f.anchorY"
+        >
+            {{ f.emoji }}
+        </span>
+    }
+</div>

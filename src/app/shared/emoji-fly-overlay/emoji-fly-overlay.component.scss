@@ -1,0 +1,35 @@
+.fly-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 200;
+}
+
+.flying-emoji {
+  position: absolute;
+  font-size: 2rem;
+  opacity: 0;
+  will-change: transform, opacity;
+  transform-origin: center;
+}
+
+// @keyframes throwArc {
+//     0% {
+//         transform: translate(0, 0) scale(0.4) rotate(0deg);
+//         opacity: 0;
+//     }
+//     15% {
+//         opacity: 1;
+//         transform: translate(calc(var(--tx) * 0.1), calc(var(--ty) * 0.1)) scale(1) rotate(45deg);
+//     }
+//     55% {
+//         transform: translate(calc(var(--tx) * 0.55), calc(var(--ty) * 0.35 - 60px)) scale(1.1) rotate(180deg);
+//     }
+//     85% {
+//         transform: translate(calc(var(--tx) * 0.92), calc(var(--ty) * 0.92)) scale(1.2) rotate(320deg);
+//     }
+//     100% {
+//         transform: translate(var(--tx), var(--ty)) scale(0.8) rotate(360deg);
+//         // opacity: 0;
+//     }
+// }

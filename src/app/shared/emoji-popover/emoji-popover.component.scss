@@ -1,0 +1,46 @@
+.emoji-popover {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    box-shadow: 0 8px 24px var(--shadow-color);
+    padding: 0.6rem;
+    width: 220px;
+}
+
+.emoji-search {
+    width: 100%;
+    padding: 0.4rem 0.6rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+    box-sizing: border-box;
+
+    &:focus {
+        outline: none;
+        border-color: var(--accent);
+    }
+}
+
+.emoji-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.2rem;
+    max-height: 180px;
+    overflow-y: auto;
+}
+
+.emoji-item {
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    padding: 0.3rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+
+    &:hover {
+        background: var(--bg-secondary);
+    }
+}
