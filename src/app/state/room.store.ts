@@ -212,6 +212,10 @@ export class RoomStore {
         this.ws.send({ type: 'setRoomLocked', locked });
     }
 
+    promoteToFacilitator(targetUserId: string): void {
+        this.ws.send({ type: 'promoteToFacilitator', targetUserId });
+    }
+
     // Messaggi in arrivo dal server
     private applyServerMessage(msg: IncomingMessage): void {
         switch (msg.type) {
@@ -225,8 +229,15 @@ export class RoomStore {
                 // sincronizza lo stato locale "carta selezionata" con la verità del server:
                 // se il server dice che non ho votato, la mia selezione locale è stantia
                 const me = msg.participants.find((p) => p.userId === this._currentUser()?.userId);
-                if (me && !me.hasVoted) {
-                    this._selectedVote.set(null);
+                
+                if (me) {
+                    const current = this._currentUser();
+                    if (current && current.role !== me.role) {
+                        this._currentUser.set({ ...current, role: me.role }); // <-- ruolo sempre allineato al server
+                    }
+                    if (!me.hasVoted) {
+                        this._selectedVote.set(null);
+                    }
                 }
                 break;
             case 'votesRevealed':

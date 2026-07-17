@@ -39,6 +39,13 @@
           >
             ✕
           </button>
+          <button
+            class="promote-button"
+            (click)="onPromoteClick($event, item.participant.userId, item.participant.userName)"
+            title="Rendi facilitator"
+          >
+            👑
+          </button>
         }
         <div
           class="participant-card"

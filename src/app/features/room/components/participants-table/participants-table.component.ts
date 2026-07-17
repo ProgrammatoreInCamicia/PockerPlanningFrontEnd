@@ -176,4 +176,11 @@ export class ParticipantsTableComponent {
       this.roomStore.kickParticipant(userId);
     }
   }
+
+  onPromoteClick(event: MouseEvent, userId: string, userName: string): void {
+    event.stopPropagation();
+    if (confirm(`Rendere ${userName} facilitator? Tu diventerai un voter.`)) {
+      this.roomStore.promoteToFacilitator(userId);
+    }
+  }
 }

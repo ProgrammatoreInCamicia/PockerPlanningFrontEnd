@@ -9,7 +9,8 @@ export type OutgoingMessage =
     | { type: 'throwEmoji'; targetUserId: string; emoji: string }
     | { type: 'confirmEstimate'; taskId: string; finalEstimate: string }
     | { type: 'kickParticipant'; targetUserId: string }
-    | { type: 'setRoomLocked'; locked: boolean };
+    | { type: 'setRoomLocked'; locked: boolean }
+    | { type: 'promoteToFacilitator'; targetUserId: string };
 
 export interface ParticipantDto {
     userId: string;
