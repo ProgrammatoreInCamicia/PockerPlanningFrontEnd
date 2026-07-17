@@ -12,11 +12,25 @@
         }
     }
     @else {
-        <button class="action-button" (click)="roomStore.reveal()" [disabled]="roomStore.revealed() || !roomStore.allVoted()">
-            Rivela carte
-        </button>
-        <button class="action-button" (click)="roomStore.reset()" [disabled]="!roomStore.allVoted()">
-            Resetta voti
-        </button>
+       <div class="facilitator-controls">
+            <span class="vote-progress">
+            {{ roomStore.votedCount() }}/{{ roomStore.totalConnectedVoters() }} hanno votato
+            </span>
+
+            <button
+                class="action-button"
+                (click)="roomStore.reveal()"
+                [disabled]="!roomStore.canReveal()"
+            >
+                Rivela carte
+            </button>
+            <button
+                class="action-button"
+                (click)="roomStore.reset()"
+                [disabled]="roomStore.votedCount() === 0"
+            >
+                Resetta voti
+            </button>
+        </div>
     }
 </div>

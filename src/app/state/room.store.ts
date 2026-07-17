@@ -58,9 +58,16 @@ export class RoomStore {
         return this._currentUser()?.role === 'facilitator';
     })
 
-    readonly allVoted = computed<boolean>(() => {
-        const voters = this._participants().filter((p) => p.role === 'voter' && p.connected);
-        return voters.length > 0 && voters.every((p) => p.hasVoted);
+    readonly votedCount = computed<number>(() => {
+        return this._participants().filter((p) => p.role === 'voter' && p.connected && p.hasVoted).length;
+    });
+
+        readonly totalConnectedVoters = computed<number>(() => {
+        return this._participants().filter((p) => p.role === 'voter' && p.connected).length;
+    });
+
+    readonly canReveal = computed<boolean>(() => {
+        return this.votedCount() > 0 && !this._revealed();
     });
 
     readonly cards = computed(() => {
