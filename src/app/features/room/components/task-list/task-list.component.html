@@ -72,7 +72,10 @@
                 @if (task.metadata['priority']; as priority) {
                     <span class="priority-badge">{{ priority }}</span>
                 }
-                 <span class="task-title">{{ task.title }}</span>
+                <span class="task-title">{{ task.title }}</span>
+                @if (task.finalEstimate; as estimate) {
+                    <span class="estimate-badge">{{ estimate }}</span>
+                }
                 @if (task.metadata['link']; as link) {
                     <a [href]="link" target="_blank" rel="noopener" class="task-link" (click)="$event.stopPropagation()">🔗</a>
                 }

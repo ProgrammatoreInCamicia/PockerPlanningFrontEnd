@@ -43,8 +43,20 @@
       <p class="total-votes">{{ stats.totalVotes }} voti totali</p>
 
       @if (roomStore.isFacilitator()) {
-        <div class="modal-actions">
-          <button class="action-button" (click)="roomStore.reset()">Rivota</button>
+        <div class="confirm-section">
+          <label>
+            Stima finale (dopo la discussione)
+            <select [(ngModel)]="selectedEstimate">
+              @for (card of roomStore.cards(); track card) {
+                <option [value]="card">{{ card }}</option>
+              }
+            </select>
+          </label>
+
+          <div class="modal-actions">
+            <button class="action-button" (click)="confirmEstimate()">Conferma stima</button>
+            <button (click)="roomStore.reset()">Rivota</button>
+          </div>
         </div>
       }
     </div>

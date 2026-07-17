@@ -93,7 +93,52 @@
   color: var(--text-secondary);
 }
 
+.confirm-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--border-color);
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  select {
+    padding: 0.5rem 0.7rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+  }
+}
+
 .modal-actions {
   display: flex;
-  justify-content: center;
+  gap: 0.6rem;
+
+  button {
+    flex: 1;
+    padding: 0.6rem 1rem;
+    border-radius: var(--radius-sm);
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  button:last-child {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+
+    &:hover {
+      background: var(--border-color);
+    }
+  }
 }

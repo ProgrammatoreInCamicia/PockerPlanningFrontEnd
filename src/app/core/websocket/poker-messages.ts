@@ -6,7 +6,8 @@ export type OutgoingMessage =
     | { type: 'resetTasks' }
     | { type: 'changePreset'; preset: string }
     | { type: 'selectTask'; taskId: string }
-    | { type: 'throwEmoji'; targetUserId: string; emoji: string };
+    | { type: 'throwEmoji'; targetUserId: string; emoji: string }
+    | { type: 'confirmEstimate'; taskId: string; finalEstimate: string };
 
 export interface ParticipantDto {
     userId: string;
@@ -30,6 +31,7 @@ export interface TaskDto {
     status: TaskStatus;
     lastVotes: VoteResultDto[] | null;
     metadata: Record<string, string>;
+    finalEstimate: string | null;
 }
 
 export interface RoomStateMessage {

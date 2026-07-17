@@ -25,19 +25,38 @@
     }
     .task-item {
         display: flex;
+        align-items: center;
+        gap: 0.5rem;
         padding: 12px 14px;
         border-radius: var(--radius-md);
         background-color: var(--sidebar-item-bg);
         cursor: pointer;
         transition: background-color 0.2s;
+
         &:hover {
             background-color: var(--sidebar-item-hover);
         }
+
+        .task-title {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
         &.selected {
             background-color: var(--accent);
             color: var(--accent-text);
             font-weight: 600;
+
+            .priority-badge,
+            .estimate-badge {
+                background: var(--bg-elevated);
+                color: var(--text-primary);
+            }
         }
+
         &.disabled {
             cursor: not-allowed;
         }
@@ -119,4 +138,24 @@
             }
         }
     }
+}
+
+.priority-badge {
+    flex-shrink: 0;
+    background: var(--accent);
+    color: var(--accent-text);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: var(--radius-sm); // angoli smussati, non pillola
+}
+
+.estimate-badge {
+    flex-shrink: 0;
+    background: var(--accent);
+    color: var(--accent-text);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.1rem 0.5rem;
+    border-radius: 999px; // pillola tonda, resta come già l'hai
 }

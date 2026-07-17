@@ -188,6 +188,10 @@ export class RoomStore {
         this.ws.send({ type: 'throwEmoji', targetUserId, emoji });
     }
 
+    confirmEstimate(taskId: string, finalEstimate: string): void {
+        this.ws.send({ type: 'confirmEstimate', taskId, finalEstimate });
+    }
+
     // Messaggi in arrivo dal server
     private applyServerMessage(msg: IncomingMessage): void {
         switch (msg.type) {
