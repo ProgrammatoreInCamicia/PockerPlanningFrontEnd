@@ -68,6 +68,20 @@
                 display: flex;
                 align-items: center;
                 gap: 0.6rem;
+                .preset-select {
+                    padding: 0.4rem 0.7rem;
+                    border-radius: var(--radius-sm);
+                    border: 1px solid var(--border-color);
+                    background: var(--bg-elevated);
+                    color: var(--text-primary);
+                    font-size: 0.85rem;
+                    cursor: pointer;
+
+                    &:focus {
+                        outline: none;
+                        border-color: var(--accent);
+                    }
+                }
             }
         }
             

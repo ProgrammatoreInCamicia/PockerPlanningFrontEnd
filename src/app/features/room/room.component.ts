@@ -78,4 +78,8 @@ export class RoomComponent implements OnInit {
       this.joining.set(false);
     }
   }
+
+  onPresetChange(preset: string): void {
+    this.roomStore.changePreset(preset);
+  }
 }

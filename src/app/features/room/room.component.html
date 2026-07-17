@@ -14,6 +14,17 @@
           </span>
         </div>
         <div class="header-actions">
+          @if (roomStore.isFacilitator()) {
+            <select
+              class="preset-select"
+              [ngModel]="roomStore.preset()"
+              (ngModelChange)="onPresetChange($event)"
+              title="Cambia preset carte"
+            >
+              <option value="fibonacci">Fibonacci</option>
+              <option value="tshirt">Taglie (T-shirt)</option>
+            </select>
+          }
           <app-connection-badge />
           <app-theme-toggle />
         </div>
