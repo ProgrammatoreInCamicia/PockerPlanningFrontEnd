@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Service } from "@angular/core";
 import { firstValueFrom, Observable } from "rxjs";
+import { environment } from "../../../environments/environment";
 
 interface CreateRoomResponse {
   roomId: string;
@@ -9,7 +10,7 @@ interface CreateRoomResponse {
 @Service()
 export class RoomApiService {
     private readonly http = inject(HttpClient);
-    private readonly baseUrl = 'https://localhost:7188/api/rooms';
+    private readonly baseUrl = `${environment.apiUrl}/rooms`;
 
     async createRoom(): Promise<string> {
         const response = await firstValueFrom(

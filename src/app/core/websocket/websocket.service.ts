@@ -1,5 +1,6 @@
 import { Service, signal } from '@angular/core';
 import { IncomingMessage, OutgoingMessage } from './poker-messages';
+import { environment } from '../../../environments/environment';
 
 export type ConnectionStatus = 'disconnected' | 'connecting' | 'connected' | 'error' | 'reconnecting';
 
@@ -22,49 +23,6 @@ export class WebsocketService {
         this.manuallyDisconnected = false;
         this.reconnectAttempt = 0;
         return this.openSocket();
-        if (this.socket) {
-            console.warn('WebSocket già connesso, chiudo la connessione precedente prima di riconnettere');
-            this.disconnect();
-        }
-
-        this._connectionStatus.set('connecting');
-
-        const host = 'localhost:7188'; // TODO: spostare in environment quando avremo ambienti diversi
-        const url = `wss://${host}/ws/poker/${roomId}`;
-
-        this.socket = new WebSocket(url);
-
-        return new Promise<void>((resolve, reject) => {
-            if (!this.socket) {
-                reject(new Error('Socket non inizializzato'));
-                return;
-            }
-
-            this.socket.onopen = () => {
-                this._connectionStatus.set('connected');
-                resolve();
-            };
-
-            this.socket.onmessage = (event: MessageEvent) => {
-                try {
-                    const parsetMessage = JSON.parse(event.data) as IncomingMessage;
-                    this.onMessageCallback?.(parsetMessage);
-                } catch (err) {
-                    console.error('Messaggio WebSocket non parsabile:', event.data, err);
-                }
-            };
-    
-            this.socket.onerror = (event: Event) => {
-                console.error('Errore WebSocket:', event);
-                this._connectionStatus.set('error');
-                reject(new Error('Errore di connessione WebSocket'));
-            };
-    
-            this.socket.onclose = () => {
-                this._connectionStatus.set('disconnected');
-                this.socket = null;
-            };
-        });
     }
 
     private openSocket(): Promise<void> {
@@ -75,8 +33,7 @@ export class WebsocketService {
 
         this._connectionStatus.set(this.reconnectAttempt > 0 ? 'reconnecting' : 'connecting');
 
-        const host = 'localhost:7188'; // TODO: spostare in environment quando avremo ambienti diversi
-        const url = `wss://${host}/ws/poker/${this.currentRoomId}`;
+        const url = `${environment.wsUrl}/poker/${this.currentRoomId}`;
         this.socket = new WebSocket(url);
 
         return new Promise<void>((resolve, reject) => {
