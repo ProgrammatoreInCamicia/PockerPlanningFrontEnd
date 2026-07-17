@@ -1,7 +1,7 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CurrentUser, RoomStore } from '../../state/room.store';
-import { loadSession, saveSession } from '../../core/session/session.store';
+import { clearSession, loadSession, saveSession } from '../../core/session/session.store';
 import { FormsModule } from '@angular/forms';
 import { VotingPanelComponent } from './components/voting-panel/voting-panel.component';
 import { TaskListComponent } from './components/task-list/task-list.component';
@@ -23,6 +23,7 @@ import { ResultsComponent } from './components/results/results.component';
   styleUrl: './room.component.scss',
 })
 export class RoomComponent implements OnInit {
+  private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   readonly roomStore = inject(RoomStore);
 
@@ -34,6 +35,15 @@ export class RoomComponent implements OnInit {
 
   readonly displayRoomName = computed(() => formatRoomName(this.roomId()));
 
+  constructor() {
+    effect(() => {
+      const reason = this.roomStore.kickedOrRejected();
+      if (reason) {
+        clearSession(this.roomId());
+        this.router.navigate(['/'], { queryParams: { notice: reason } });
+      }
+    });
+  }
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('roomId');

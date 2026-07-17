@@ -169,4 +169,11 @@ export class ParticipantsTableComponent {
     this.openPickerFor.set(null);
     this.popoverPosition.set(null);
   }
+
+  onKickClick(event: MouseEvent, userId: string, userName: string): void {
+    event.stopPropagation();
+    if (confirm(`Rimuovere ${userName} dalla stanza?`)) {
+      this.roomStore.kickParticipant(userId);
+    }
+  }
 }

@@ -15,6 +15,14 @@
         </div>
         <div class="header-actions">
           @if (roomStore.isFacilitator()) {
+            <button
+              class="action-button lock-toggle"
+              [class.active]="roomStore.locked()"
+              (click)="roomStore.setRoomLocked(!roomStore.locked())"
+              [title]="roomStore.locked() ? 'Stanza bloccata: nessun nuovo ingresso' : 'Stanza aperta'"
+            >
+              {{ roomStore.locked() ? '🔒' : '🔓' }}
+            </button>
             <select
               class="preset-select"
               [ngModel]="roomStore.preset()"

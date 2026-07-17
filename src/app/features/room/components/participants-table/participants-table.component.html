@@ -31,6 +31,15 @@
         [attr.data-participant-id]="item.participant.userId"
         (click)="togglePicker(item.participant.userId)"
       >
+        @if (roomStore.isFacilitator()) {
+          <button
+            class="kick-button"
+            (click)="onKickClick($event, item.participant.userId, item.participant.userName)"
+            title="Rimuovi partecipante"
+          >
+            ✕
+          </button>
+        }
         <div
           class="participant-card"
           [attr.data-emoji-target]="item.participant.userId"

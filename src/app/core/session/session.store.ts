@@ -16,3 +16,7 @@ export function loadSession(roomId: string): CurrentUser | null {
         return null;
     }
 }
+
+export function clearSession(roomId: string): void {
+  sessionStorage.removeItem(KEY_PREFIX + roomId);
+}

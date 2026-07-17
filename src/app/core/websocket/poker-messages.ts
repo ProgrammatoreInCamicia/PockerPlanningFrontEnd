@@ -7,7 +7,9 @@ export type OutgoingMessage =
     | { type: 'changePreset'; preset: string }
     | { type: 'selectTask'; taskId: string }
     | { type: 'throwEmoji'; targetUserId: string; emoji: string }
-    | { type: 'confirmEstimate'; taskId: string; finalEstimate: string };
+    | { type: 'confirmEstimate'; taskId: string; finalEstimate: string }
+    | { type: 'kickParticipant'; targetUserId: string }
+    | { type: 'setRoomLocked'; locked: boolean };
 
 export interface ParticipantDto {
     userId: string;
@@ -39,6 +41,7 @@ export interface RoomStateMessage {
     preset: 'fibonacci' | 'tshirt';
     revealed: boolean;
     activeTaskId: string | null;
+    locked: boolean;
     tasks: TaskDto[];
     participants: ParticipantDto[];
 }
@@ -61,7 +64,17 @@ export interface EmojiThrownMessage {
   emoji: string;
 }
 
-export type IncomingMessage = RoomStateMessage | VotesRevealedMessage | ErrorMessage | EmojiThrownMessage;
+export interface KickedMessage {
+  type: 'kicked';
+}
+
+export interface JoinRejectedMessage {
+  type: 'joinRejected';
+  reason: 'locked' | 'kicked';
+}
+
+export type IncomingMessage = RoomStateMessage | VotesRevealedMessage | ErrorMessage 
+    | EmojiThrownMessage | KickedMessage | JoinRejectedMessage;
 
 export const CardPresets = {
     "fibonacci": ["0", "1", "2", "3", "5", "8", "13", "21", "?", "☕"],

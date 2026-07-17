@@ -34,7 +34,10 @@ export class RoomStore {
     private readonly _lastError = signal<string | null>(null);
     private readonly _selectedVote = signal<string | null>(null);
     private readonly _lastEmojiThrow = signal<EmojiThrownMessage | null>(null);
-
+    private readonly _locked = signal<boolean>(false);
+    private readonly _kickedOrRejected = signal<'kicked' | 'locked' | null>(null);
+    
+    
     // public
     readonly preset = this._preset.asReadonly();
     readonly revealed = this._revealed.asReadonly();
@@ -46,6 +49,8 @@ export class RoomStore {
     readonly connectionStatus = this.ws.connectionStatus;
     readonly selectedVote = this._selectedVote.asReadonly();
     readonly lastEmojiThrow = this._lastEmojiThrow.asReadonly();
+    readonly locked = this._locked.asReadonly();
+    readonly kickedOrRejected = this._kickedOrRejected.asReadonly();
 
     // computed
     readonly activeTask = computed<TaskDto | null>(() => {
@@ -199,6 +204,14 @@ export class RoomStore {
         this.ws.send({ type: 'confirmEstimate', taskId, finalEstimate });
     }
 
+    kickParticipant(targetUserId: string): void {
+        this.ws.send({ type: 'kickParticipant', targetUserId });
+    }
+
+    setRoomLocked(locked: boolean): void {
+        this.ws.send({ type: 'setRoomLocked', locked });
+    }
+
     // Messaggi in arrivo dal server
     private applyServerMessage(msg: IncomingMessage): void {
         switch (msg.type) {
@@ -208,6 +221,7 @@ export class RoomStore {
                 this._activeTaskId.set(msg.activeTaskId);
                 this._tasks.set(msg.tasks);
                 this._participants.set(msg.participants);
+                this._locked.set(msg.locked);
                 // sincronizza lo stato locale "carta selezionata" con la verità del server:
                 // se il server dice che non ho votato, la mia selezione locale è stantia
                 const me = msg.participants.find((p) => p.userId === this._currentUser()?.userId);
@@ -226,6 +240,15 @@ export class RoomStore {
                 break;
             case 'emojiThrown':
                 this._lastEmojiThrow.set(msg);
+                break;
+            case 'kicked':
+                this._kickedOrRejected.set('kicked');
+                this.ws.disconnect(); // ferma il ciclo di riconnessione automatica
+                break;
+
+            case 'joinRejected':
+                this._kickedOrRejected.set(msg.reason);
+                this.ws.disconnect();
                 break;
         };
     }
