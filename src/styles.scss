@@ -32,6 +32,9 @@
     --radius-sm: 6px;
     --radius-md: 12px;
     --radius-lg: 20px;
+
+    --font-heading: 'Fraunces', serif;
+    --font-body: 'Nunito', -apple-system, sans-serif;
 }
 
 [data-theme='dark'] {
@@ -100,6 +103,7 @@ body {
     background: var(--bg-secondary);
     color: var(--text-primary);
     transition: background-color 0.2s, color 0.2s;
+    font-family: var(--font-body);
 }
 
 html, 
@@ -110,6 +114,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
     margin: 0;
     padding: 0;
 }
