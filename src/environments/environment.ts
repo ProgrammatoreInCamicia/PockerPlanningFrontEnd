@@ -1,5 +1,5 @@
 export const environment = {
-    production: false,
-    apiUrl: 'https://localhost:7188/api',
-    wsUrl: 'wss://localhost:7188/ws',
+    production: true,
+    apiUrl: 'https://poker-api.programmatoreincamicia.dev/api',
+    wsUrl: 'wss://poker-api.programmatoreincamicia.dev/ws',
 };
