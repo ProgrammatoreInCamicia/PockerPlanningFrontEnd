@@ -1,6 +1,7 @@
 import { computed, inject, Service, signal } from "@angular/core";
 import { WebsocketService } from "../core/websocket/websocket.service";
 import { CardPresets, EmojiThrownMessage, IncomingMessage, ParticipantDto, TaskDto } from "../core/websocket/poker-messages";
+import { ToastService } from "../core/toast/toast.service";
 
 export interface CurrentUser {
     userId: string;
@@ -23,6 +24,7 @@ export interface VoteStats {
 @Service()
 export class RoomStore {
     private readonly ws = inject(WebsocketService);
+    private readonly toast = inject(ToastService);
 
     // Stato privato scrivibile solo da qui
     private readonly _preset = signal<'fibonacci' | 'tshirt'>('fibonacci');
@@ -31,7 +33,6 @@ export class RoomStore {
     private readonly _tasks = signal<TaskDto[]>([]);
     private readonly _participants = signal<ParticipantDto[]>([]);
     private readonly _currentUser = signal<CurrentUser | null>(null);
-    private readonly _lastError = signal<string | null>(null);
     private readonly _selectedVote = signal<string | null>(null);
     private readonly _lastEmojiThrow = signal<EmojiThrownMessage | null>(null);
     private readonly _locked = signal<boolean>(false);
@@ -45,7 +46,6 @@ export class RoomStore {
     readonly tasks = this._tasks.asReadonly();
     readonly participants = this._participants.asReadonly();
     readonly currentUser = this._currentUser.asReadonly();
-    readonly lastError = this._lastError.asReadonly();
     readonly connectionStatus = this.ws.connectionStatus;
     readonly selectedVote = this._selectedVote.asReadonly();
     readonly lastEmojiThrow = this._lastEmojiThrow.asReadonly();
@@ -247,7 +247,7 @@ export class RoomStore {
                 // e per un futuro highlight "voti appena rivelati".
                 break;
             case 'error':
-                this._lastError.set(msg.message);
+                this.toast.error(msg.message);
                 break;
             case 'emojiThrown':
                 this._lastEmojiThrow.set(msg);
